@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Model Interface</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Question Answering System</h2>
+    <form id="qaForm">
+        <div class="form-group">
+            <label for="url">Enter URL:</label>
+            <input type="url" class="form-control" id="url" required>
+        </div>
+        <div class="form-group">
+            <label for="question">Ask a Question:</label>
+            <input type="text" class="form-control" id="question" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Answer</button>
+    </form>
+    <div id="answer" class="mt-4"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#qaForm').on('submit', function(e) {
+            e.preventDefault();
+            var url = $('#url').val();
+            var question = $('#question').val();
+            $.ajax({
+                url: 'http://192.168.74.73:5001/fetch-answer',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ url: url, question: question }),
+                success: function(data) {
+                    $('#answer').html('<p><strong>Answer:</strong> ' + data.answer + '</p>');
+                },
+                error: function() {
+                    $('#answer').html('<p>An error occurred.</p>');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
